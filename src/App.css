@@ -1,0 +1,19 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Small screens (phones) */
+@media (max-width: 600px) {
+    /* Adjust layout and styles for smaller viewports */
+  }
+  
+  /* Medium screens (tablets) */
+  @media (min-width: 601px) and (max-width: 992px) {
+    /* Adjust styles for medium viewports */
+  }
+  
+  /* Large screens (desktops) */
+  @media (min-width: 993px) {
+    /* Adjust styles for large viewports */
+  }
