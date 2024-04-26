@@ -17,19 +17,22 @@ import {
   ListItemContent,
   Stack,
   Chip,
+  Link,
 } from "@mui/joy";
+import { Route, Link as RouterLink } from "react-router-dom";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion, { accordionClasses } from "@mui/joy/Accordion";
 import AccordionDetails from "@mui/joy/AccordionDetails";
 import AccordionSummary from "@mui/joy/AccordionSummary";
+
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import CheckIcon from "@mui/icons-material/Check";
-import axios from "axios";
-import ChecklistIcon from '@mui/icons-material/Checklist';
-import RestoreIcon from '@mui/icons-material/Restore';
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import RestoreIcon from "@mui/icons-material/Restore";
 
 interface ExcessData {
+  excessID : number;
   itemNo: string;
   itemName: string;
   qty: string;
@@ -73,6 +76,7 @@ function App(): JSX.Element {
       );
       const data = await response.json();
       setExcessData(data.data);
+   
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -308,12 +312,12 @@ function App(): JSX.Element {
                               </Avatar>
                             </td>
                             <td>
-                            <Typography level="body-xs">Status</Typography>
-                              <Chip color='primary'>
+                              <Typography level="body-xs">Status</Typography>
+                              <Chip color="primary">
                                 <Typography level="title-md">
                                   Pending
                                 </Typography>
-                                </Chip>
+                              </Chip>
                             </td>
                           </tr>
                         </tbody>
@@ -321,7 +325,7 @@ function App(): JSX.Element {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Box>
-                        <Stack direction={"row"} spacing={2} >
+                        <Stack direction={"row"} spacing={2}>
                           <Avatar color="success">
                             <CheckIcon />
                           </Avatar>
@@ -334,21 +338,23 @@ function App(): JSX.Element {
                             </Typography>
                           </ListItemContent>
                         </Stack>
-                        <AccordionGroup color="danger" variant="soft" sx={{
-                          margin : "5",
-                          padding : "1"
-                        }}>
+                        <AccordionGroup
+                          color="danger"
+                          variant="soft"
+                          sx={{
+                            margin: "5",
+                            padding: "1",
+                          }}
+                        >
                           <Accordion>
                             <AccordionSummary>
-                           
-                            <RestoreIcon />
-                       
-                              <Typography>Previous available plan lot</Typography>
+                              <RestoreIcon />
 
-                             
+                              <Typography>
+                                Previous available plan lot
+                              </Typography>
                             </AccordionSummary>
                             <AccordionDetails color="success">
-                            
                               <Table
                                 key={index}
                                 color="danger"
@@ -361,7 +367,7 @@ function App(): JSX.Element {
                                   },
                                   width: "95%",
                                   borderRadius: "lg",
-                                  alignSelf : "center"
+                                  alignSelf: "center",
                                 }}
                               >
                                 <thead>
@@ -391,7 +397,10 @@ function App(): JSX.Element {
                                       <tr>
                                         <td>
                                           <Typography level="body-sm">
-                                            {String(item.planlot).replace(/^\*|\*$/g, '')}
+                                            {String(item.planlot).replace(
+                                              /^\*|\*$/g,
+                                              ""
+                                            )}
                                           </Typography>
                                         </td>
                                         <td>
@@ -414,86 +423,109 @@ function App(): JSX.Element {
                               </Table>
                             </AccordionDetails>
                           </Accordion>
-                          <AccordionGroup color="success" variant="soft" sx={{
-                          margin : "5",
-                          padding : "1"
-                        }}>
-                          <Accordion>
-                            <AccordionSummary>
-                          
-                            <ChecklistIcon />
-                        
-                              <Typography>Next available plan lot</Typography>
+                          <AccordionGroup
+                            color="success"
+                            variant="soft"
+                            sx={{
+                              margin: "5",
+                              padding: "1",
+                            }}
+                          >
+                            <Accordion>
+                              <AccordionSummary>
+                                <ChecklistIcon />
 
-                             
-                            </AccordionSummary>
-                            <AccordionDetails>
-                            
-                              <Table
-                                key={index}
-                                color="success"
-                                size="sm"
-                                variant="soft"
-                                borderAxis="both"
-                                sx={{
-                                  "& tr > *:not(:first-child)": {
-                                    textAlign: "center",
-                                  },
-                                  width: "95%",
-                                  borderRadius: "lg",
-                                  alignSelf : "center"
-                                }}
-                              >
-                                <thead>
-                                  <tr>
-                                    <th>
-                                      <Typography level="title-sm">
-                                        Plan Lot
-                                      </Typography>
-                                    </th>
-                                    <th>
-                                      <Typography level="title-sm">
-                                        Open Quantity
-                                      </Typography>
-                                    </th>
-                                    <th>
-                                      <Typography level="title-sm">
-                                        Start Date
-                                      </Typography>
-                                    </th>
-                                  </tr>
-                                </thead>
-                                {additionalData.map((item, index) =>
-                                  item.startDate >
-                                    dataItem.excessDate.replace(/-/g, "") &&
-                                  item.startDate > formattedToday ? (
-                                    <tbody>
-                                      <tr>
-                                        <td>
-                                          <Typography level="body-sm">
-                                            {String(item.planlot).replace(/^\*|\*$/g, '')}
-                                          </Typography>
-                                        </td>
-                                        <td>
-                                          <Typography level="body-sm">
-                                            {item.openqty}
-                                          </Typography>
-                                        </td>
-                                        <td>
-                                          <Typography level="body-sm">
-                                            {String(item.startDate).replace(
-                                              /(\d{4})(\d{2})(\d{2})/,
-                                              "$1-$2-$3"
-                                            )}
-                                          </Typography>
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  ) : null
-                                )}
-                              </Table>
-                            </AccordionDetails>
-                          </Accordion>
+                                <Typography>Next available plan lot</Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <Table
+                                  key={index}
+                                  color="success"
+                                  size="sm"
+                                  variant="soft"
+                                  borderAxis="both"
+                                  sx={{
+                                    "& tr > *:not(:first-child)": {
+                                      textAlign: "center",
+                                    },
+                                    width: "95%",
+                                    borderRadius: "lg",
+                                    alignSelf: "center",
+                                  }}
+                                >
+                                  <thead>
+                                    <tr>
+                                      <th>
+                                        <Typography level="title-sm">
+                                          Plan Lot
+                                        </Typography>
+                                      </th>
+                                      <th>
+                                        <Typography level="title-sm">
+                                          Open Quantity
+                                        </Typography>
+                                      </th>
+                                      <th>
+                                        <Typography level="title-sm">
+                                          Start Date
+                                        </Typography>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  {additionalData.map((item, index) =>
+                                    item.startDate >
+                                      dataItem.excessDate.replace(/-/g, "") &&
+                                    item.startDate > formattedToday ? (
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                            <Typography level="title-md">
+                                              <Link
+                                                component={RouterLink}
+                                                to="/confirmation"
+                                                state={{
+                                                  excessID: dataItem.excessID,
+                                                  planlot: item.planlot,
+                                                  itemName: dataItem.itemName,
+                                                  openqty: item.openqty,
+                                                  startDate: item.startDate,
+                                                  disbursement:
+                                                    item.disbursement,
+                                                  location: dataItem.location,
+                                                  itemNo: dataItem.itemNo,
+                                                  excessDate:
+                                                    dataItem.excessDate,
+                                                  excessQty:
+                                                    dataItem.qty,
+                                                }}
+                                              >
+                                                {String(item.planlot).replace(
+                                                  /^\*|\*$/g,
+                                                  ""
+                                                )}
+                                              </Link>
+                                            </Typography>
+                                          </td>
+                                          <td>
+                                            <Typography level="body-sm">
+                                              {item.openqty}
+                                            </Typography>
+                                          </td>
+                                          <td>
+                                            <Typography level="body-sm">
+                                              {String(item.startDate).replace(
+                                                /(\d{4})(\d{2})(\d{2})/,
+                                                "$1-$2-$3"
+                                              )}
+                                            </Typography>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    ) : null
+                                  )}
+                                </Table>
+                              </AccordionDetails>
+                            </Accordion>
                           </AccordionGroup>
                         </AccordionGroup>
                       </Box>
