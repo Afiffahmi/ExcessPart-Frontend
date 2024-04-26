@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import { Card, LinearProgress } from '@mui/joy';
+import { Card, LinearProgress, Input } from '@mui/joy';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +11,7 @@ function App() {
   const [data, setData] = useState<any[]>([]);
   const [insertions, setInsertions] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10)); // Set initial date to today
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -67,6 +68,11 @@ function App() {
 
       for (const dataObject of jsonData) {
         try {
+          // Add the date to the data object before sending it
+          dataObject.date = date;
+
+        
+
           const phpResponse = await axios.post('http://localhost:8080/EPMS/matecon-data/upload.php', dataObject);
           console.log(phpResponse.data);
           successfulInsertions++;
@@ -95,7 +101,12 @@ function App() {
         <LinearProgress determinate value={progress} />
         <h2>Upload Excel File</h2>
         <form onSubmit={handleSubmit}>
-          <input type="file" onChange={handleFileChange} />
+        <Input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+                    />
+          <Input type="file" onChange={handleFileChange} />
           <button type="submit" disabled={loading}>
             {loading ? 'Loading...' : 'Upload'}
           </button>

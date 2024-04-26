@@ -10,10 +10,14 @@ import { Link } from 'react-router-dom';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
+import CategoryIcon from '@mui/icons-material/Category';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import TodayRoundedIcon from '@mui/icons-material/TodayRounded';
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import { Stack,Sheet,Chip } from '@mui/joy';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 export default function Navigation() {
   const [selectedItem, setSelectedItem] = React.useState(null);
@@ -45,9 +49,23 @@ export default function Navigation() {
             <Link to="/excess" style={{ textDecoration: 'none' }}>
               <Stack direction="row" spacing={1}>
               <ListItemDecorator>
-                <PeopleRoundedIcon fontSize="small" />
+                <CategoryIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Excess</ListItemContent>
+              <ListItemContent>Excess Parts</ListItemContent>
+              </Stack>
+              </Link>
+            </ListItemButton>
+          </ListItem>
+          <ListItem onClick={() => handleItemClick('regex')}>
+            
+            <ListItemButton selected={selectedItem === 'regex'}
+              >
+            <Link to="/regex" style={{ textDecoration: 'none' }}>
+              <Stack direction="row" spacing={1}>
+              <ListItemDecorator>
+                <AddIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Register Excess Parts</ListItemContent>
               </Stack>
               </Link>
             </ListItemButton>
@@ -56,27 +74,18 @@ export default function Navigation() {
             <ListItemButton selected={selectedItem === 'disposeHistory'}
               onClick={() => handleItemClick('disposeHistory')}>
               <ListItemDecorator sx={{ color: 'neutral.500' }}>
-                <AssignmentIndRoundedIcon fontSize="small" />
+                <DeleteIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>Dispose History</ListItemContent>
             </ListItemButton>
           </ListItem>
-          <ListItem>
-            <ListItemButton
-            selected={selectedItem === 'disposeList'}
-            onClick={() => handleItemClick('disposeList')}>
-              <ListItemDecorator sx={{ color: 'neutral.500' }}>
-                <AccountTreeRoundedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Dispose list</ListItemContent>
-            </ListItemButton>
-          </ListItem>
+
           <ListItem>
             <ListItemButton
             selected={selectedItem === 'consumeList'}
             onClick={() => handleItemClick('consumeList')}>
               <ListItemDecorator sx={{ color: 'neutral.500' }}>
-                <TodayRoundedIcon fontSize="small" />
+                <ShoppingCartCheckoutIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>Consume list</ListItemContent>
             </ListItemButton>

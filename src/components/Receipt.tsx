@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Sheet,Modal,ModalClose,ModalDialog ,Card, Divider, Stack,Table,List,ListItem,ListItemDecorator,CardActions,Button,Alert } from '@mui/joy';
+import {Sheet ,Card, Divider, Stack,Table,List,ListItem,ListItemDecorator,CardActions,Button,Alert } from '@mui/joy';
 import CardContent from '@mui/joy/CardContent';
 import Chip from '@mui/joy/Chip';
 import Typography from '@mui/joy/Typography';
@@ -17,6 +17,7 @@ interface Confirmation {
   itemName: string;
   qty: string;
   location: string;
+  excessDate: string;
 }
 
 interface Invalid {
@@ -65,6 +66,7 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
               excessDate: "",
               pickingID: "",
               location: "",
+
             },
           ],
         });
@@ -96,18 +98,15 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
       <Card
         size="sm"
         orientation="horizontal"
-        variant="solid"
-        color="neutral"
-        invertedColors
-        sx={{
-          bgcolor: 'neutral.900',
-          width: 1200,
-          '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' }
-        }}
+        variant="soft"
+        color="primary"
+       
       >
         <CardContent>
           <Stack direction="row">
+            <ListItemDecorator>
             <ErrorIcon />
+            </ListItemDecorator>
             <Typography level="h3" id="card-description">
               Confirmation
             </Typography>
@@ -134,6 +133,10 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
                 <Chip variant="outlined" color="primary" size="sm" sx={{ pointerEvents: 'none' }}>
                   Quantity: {item?.qty} pcs
                 </Chip></td>
+                <td>
+                <Typography level="body-sm" aria-describedby="card-description">
+                  {item?.excessDate}
+                </Typography></td>
                 </tbody>
               </Table>
             ))}
@@ -142,17 +145,20 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
           
           <CardActions>
             <form onSubmit={handleSubmit}>
-          <Typography level="title-lg" sx={{ mr: 'auto' }}>
+              <Stack direction="row" spacing={130} sx={{alignContent:"flex-start"}}>
+              <Typography level="title-lg" sx={{ mr: 'auto' }}>
             {confirmation.length}{' '}
             <Typography fontSize="sm" textColor="text.tertiary">
                items
             </Typography>
           </Typography>
-          <Button type="submit" endDecorator={<KeyboardArrowRight />}>Submit</Button>
+          <Button type="submit" endDecorator={<KeyboardArrowRight />} sx={{alignSelf:"center",alignItems:"center"}}>Submit</Button>
+              </Stack>
+          
           </form>
         </CardActions>
         <Divider inset="none" />
-        {invalidData?.length > 0 ? (<Card invertedColors variant="plain">
+        {invalidData?.length > 0 ? (<Card variant="soft" color='primary' sx={{width:"500px", alignSelf:"center"}}>
         <Alert color='danger' variant='solid' size='sm'>Invalid Item Number</Alert>
         </Card>) : null}
           <List

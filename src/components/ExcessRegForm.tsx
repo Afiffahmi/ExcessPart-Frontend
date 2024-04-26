@@ -139,7 +139,7 @@ const FormComponent: React.FC = () => {
   justifyContent="center"
   alignItems="center"
 >
-      <Typography level={"h2"} startDecorator={<InventoryIcon color="warning"/>}>Excess Registration Form</Typography>
+      <Typography level={"h2"} startDecorator={<InventoryIcon color="warning"/>}>Excess Part Registration Form</Typography>
       <form onSubmit={handleSubmit}>
         <ToastContainer
           position="bottom-right"
@@ -256,7 +256,7 @@ const FormComponent: React.FC = () => {
               color="success"
               disabled = {transaction}
             >
-              Check
+              Next
             </Button>
           </Stack>
         </Stack>
