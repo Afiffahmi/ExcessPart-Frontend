@@ -11,6 +11,7 @@ import Database from "./routes/Database"
 import RegisterExcess from "./routes/RegisterExcess"
 import ExcessPart from "./routes/ExcessPart";
 import Confirmation from "./routes/Cofirmation";
+import ConsumeList from"./routes/ConsumeList";
 
 
 const rootContainer = document.getElementById("root");
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
     path: "/confirmation",
     element: <Confirmation />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/consume",
+    element: <ConsumeList />,
+    errorElement: <ErrorPage/>
   }
   
 

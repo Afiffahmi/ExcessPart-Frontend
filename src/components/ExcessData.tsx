@@ -18,6 +18,9 @@ import {
   Stack,
   Chip,
   Link,
+  Skeleton,
+  AspectRatio,
+  CircularProgress
 } from "@mui/joy";
 import { Route, Link as RouterLink } from "react-router-dom";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
@@ -39,6 +42,7 @@ interface ExcessData {
   excessDate: string;
   pickingID: string;
   location: string;
+  status: string;
 }
 
 export interface Root {
@@ -63,6 +67,7 @@ function App(): JSX.Element {
   const [indexs, setIndex] = React.useState<number | null>(null);
   const [selectedItemNo, setSelectedItemNo] = useState(""); // To store selected itemNo
   const [additionalData, setAdditionalData] = useState<Daum[]>([]);
+  const [loading, setLoading] = useState<Boolean>(true);
   const today = new Date();
   const formattedToday = today.toISOString().slice(0, 10).replace(/-/g, ""); // Format today's date as "YYYYMMDD"
 
@@ -97,12 +102,14 @@ function App(): JSX.Element {
 
   const fetchAdditionalData = async (itemNo: any) => {
     try {
+      setLoading(true);
       const response = await fetch(
         `http://localhost:8080/EPMS/matecon-data/forecast.php?itemNo=${itemNo}`
       );
       const data = await response.json();
       console.log(data);
       setAdditionalData(data.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching additional data:", error);
     }
@@ -315,7 +322,7 @@ function App(): JSX.Element {
                               <Typography level="body-xs">Status</Typography>
                               <Chip color="primary">
                                 <Typography level="title-md">
-                                  Pending
+                                  {dataItem.status ? dataItem.status : "pending"}
                                 </Typography>
                               </Chip>
                             </td>
@@ -338,7 +345,8 @@ function App(): JSX.Element {
                             </Typography>
                           </ListItemContent>
                         </Stack>
-                        <AccordionGroup
+                       
+                          <AccordionGroup
                           color="danger"
                           variant="soft"
                           sx={{
@@ -355,7 +363,13 @@ function App(): JSX.Element {
                               </Typography>
                             </AccordionSummary>
                             <AccordionDetails color="success">
-                              <Table
+                              {loading ? (<CircularProgress
+  color="neutral"
+  determinate={false}
+  size="sm"
+  variant="solid"
+  sx={{alignSelf: "center"}}
+/>) :  ( <Table
                                 key={index}
                                 color="danger"
                                 size="sm"
@@ -389,6 +403,7 @@ function App(): JSX.Element {
                                     </th>
                                   </tr>
                                 </thead>
+                                
                                 {additionalData.map((item, index) =>
                                   item.startDate >
                                     dataItem.excessDate.replace(/-/g, "") &&
@@ -420,7 +435,8 @@ function App(): JSX.Element {
                                     </tbody>
                                   ) : null
                                 )}
-                              </Table>
+                              </Table> )}
+                             
                             </AccordionDetails>
                           </Accordion>
                           <AccordionGroup
@@ -438,7 +454,13 @@ function App(): JSX.Element {
                                 <Typography>Next available plan lot</Typography>
                               </AccordionSummary>
                               <AccordionDetails>
-                                <Table
+                                {loading ? ((<CircularProgress
+  color="neutral"
+  determinate={false}
+  size="sm"
+  variant="solid"
+  sx={{alignSelf: "center"}}
+/>)) : (<Table
                                   key={index}
                                   color="success"
                                   size="sm"
@@ -523,11 +545,14 @@ function App(): JSX.Element {
                                       </tbody>
                                     ) : null
                                   )}
-                                </Table>
+                                </Table>)}
+                                
                               </AccordionDetails>
                             </Accordion>
                           </AccordionGroup>
                         </AccordionGroup>
+                        
+                        
                       </Box>
                     </AccordionDetails>
                   </Accordion>

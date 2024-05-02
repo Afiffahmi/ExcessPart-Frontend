@@ -7,12 +7,9 @@ import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListItemContent from '@mui/joy/ListItemContent';
 import { Link } from 'react-router-dom';
 
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
-import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
-import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
+
 import CategoryIcon from '@mui/icons-material/Category';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
-import TodayRoundedIcon from '@mui/icons-material/TodayRounded';
+import CheckIcon from '@mui/icons-material/Verified';
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import { Stack,Sheet,Chip } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
@@ -84,12 +81,33 @@ export default function Navigation() {
             <ListItemButton
             selected={selectedItem === 'consumeList'}
             onClick={() => handleItemClick('consumeList')}>
+              <Link to="/consume" style={{ textDecoration: 'none' }}>
+                <Stack direction="row" spacing={1}>
               <ListItemDecorator sx={{ color: 'neutral.500' }}>
                 <ShoppingCartCheckoutIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>Consume list</ListItemContent>
+              </Stack>
+              </Link>
             </ListItemButton>
           </ListItem>
+
+          <ListItem>
+            <ListItemButton
+            selected={selectedItem === 'consumeHistory'}
+            onClick={() => handleItemClick('consumeHistory')}>
+              <Link to="/history" style={{ textDecoration: 'none' }}>
+                <Stack direction="row" spacing={1}>
+              <ListItemDecorator sx={{ color: 'neutral.500' }}>
+                <CheckIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Consume History</ListItemContent>
+              </Stack>
+              </Link>
+            </ListItemButton>
+          </ListItem>
+
+
           <ListItem>
             <ListItemButton
             selected={selectedItem === 'database'}
