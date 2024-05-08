@@ -12,6 +12,11 @@ import RegisterExcess from "./routes/RegisterExcess"
 import ExcessPart from "./routes/ExcessPart";
 import Confirmation from "./routes/Cofirmation";
 import ConsumeList from"./routes/ConsumeList";
+import ConsumeHistory from"./routes/ConsumeHistory";
+import Login from "./routes/Login";
+import Protected from "./components/Protected";
+import Register from "./routes/Register";
+
 
 
 const rootContainer = document.getElementById("root");
@@ -23,33 +28,49 @@ if (!rootContainer) {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <Protected Component={App}/>,
     errorElement: <ErrorPage />,
   },
   {
     path:"/database",
-    element: <Database />,
+    element: <Protected Component={Database}/>,
     errorElement: <ErrorPage />,
   },
   {
     path: "/regex",
-    element: <RegisterExcess />,
+    element: <Protected Component={RegisterExcess}/>,
     errorElement: <ErrorPage />,
   },
   {
     path:"/excess",
-    element: <ExcessPart/>,
+    element: <Protected Component={ExcessPart}/>,
     errorElement: <ErrorPage />,
+    
   },
   {
     path: "/confirmation",
-    element: <Confirmation />,
+    element: <Protected Component={Confirmation}/>,
     errorElement: <ErrorPage />,
   },
   {
     path: "/consume",
-    element: <ConsumeList />,
+    element: <Protected Component={ConsumeList}/>,
     errorElement: <ErrorPage/>
+  },
+  {
+    path: "/history",
+    element: <Protected Component={ConsumeHistory}/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/register',
+    element: <Register />,
+    errorElement: <ErrorPage />
   }
   
 

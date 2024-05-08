@@ -44,7 +44,7 @@ export default function TeamExample() {
           <List
             sx={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(1300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(1000px, 1fr))',
               gap: 1,
             }}
           >

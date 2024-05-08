@@ -7,7 +7,7 @@ import Sheet from '@mui/joy/Sheet';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import Navigation from '../components/Navigation';
-import ExcessData from '../components/ExcessData';
+import ConsumePartHistory from '../components/ConsumePartHistory';
 import { Typography } from '@mui/joy';
 import { Divider } from '@mui/joy';
 
@@ -59,7 +59,7 @@ export default function TeamExample() {
               ><Layout.SidePane sx={{
                 
               }}>
-                <ExcessData/>
+                <ConsumePartHistory/>
               </Layout.SidePane>
               </Sheet>
           </List>

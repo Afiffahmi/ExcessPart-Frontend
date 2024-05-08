@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Sheet, Table, Button, Input,IconButton,Typography } from '@mui/joy';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
@@ -19,7 +19,7 @@ function App(): JSX.Element {
       // Format the date value to YYYYMMDD
       const formattedDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   
-      const response = await fetch(`http://localhost:8080/EPMS/matecon-data/mateconData.php?page=${pageNumber}&searchQuery=${searchQuery}&startDate=${formattedDate}`);
+      const response = await fetch(`/api/mateconData.php?page=${pageNumber}&searchQuery=${searchQuery}&startDate=${formattedDate}`);
       const data = await response.json();
       setJsonData(data.data);
       setTotalPages(data.totalPages);

@@ -13,7 +13,6 @@ import {
   Stack,
   Chip,
 } from "@mui/joy";
-import axios from 'axios';
 import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion, { accordionClasses } from "@mui/joy/Accordion";
 import AccordionDetails from "@mui/joy/AccordionDetails";
@@ -22,7 +21,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import RestoreIcon from "@mui/icons-material/Restore";
-import PdfGenerator from '../components/PdfGenerator'
+import PdfGenerator from './PdfGenerator'
 
 export interface Root {
   data: ExcessData[];
@@ -52,7 +51,6 @@ export interface ConsumeDaum {
   consumeQty: number;
   planlot: string;
   startDate: string;
-  Name : string;
 }
 
 function App(): JSX.Element {
@@ -66,12 +64,12 @@ function App(): JSX.Element {
 
   const fetchData = async (search = "", page = 1) => {
     try {
-      const response = await axios.get(
+      const response = await fetch(
         `/api/consumeData.php?search=${search}&page=${page}&pageSize=${itemsPerPage}`
       );
-      const data = await response.data;
+      const data = await response.json();
       // @ts-ignore
-      const filteredData = data.data.filter(item => item.qty !== 0);
+      const filteredData = data.data.filter(item => item.qty == 0);
 
     setExcessData(filteredData);
 
@@ -96,8 +94,6 @@ function App(): JSX.Element {
   const handlePaginationClick = (newPage: number): void => {
     setPage(newPage);
   };
-
-
 
   const renderPagination = (): JSX.Element[] => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage); // Calculate total pages based on filtered data
@@ -177,7 +173,7 @@ function App(): JSX.Element {
         alignItems="center"
       >
         <Typography level="h2" >
-          Consume Part List
+          Consume Part History
         </Typography>
 
         <Sheet>
@@ -214,7 +210,6 @@ function App(): JSX.Element {
                     }}
                   />
                 </th>
-               
               </tr>
             </thead>
             <tbody>
@@ -280,7 +275,7 @@ function App(): JSX.Element {
                             </td>
                             <td>
                               <Typography level="body-xs">
-                                Available Quantity
+                                Remain Quantity
                               </Typography>
                               <Typography level="title-md">
                                 {dataItem.qty}

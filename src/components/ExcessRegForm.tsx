@@ -19,6 +19,7 @@ interface ExcessPart {
   excessDate: string;
   pickingID: string;
   location: string;
+  ID: number;
 
 }
 
@@ -28,18 +29,33 @@ interface Data {
 }
 
 const FormComponent: React.FC = () => {
+  const today = new Date();
+
+let year = today.getFullYear();
+let month = String(today.getMonth() + 1).padStart(2, '0');
+let day = String(today.getDate()).padStart(2, '0');
+
+const formattedDate = `${year}-${month}-${day}`;
+const id = (localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token") as string) : ""  );
+
+ 
+
+  const staffID = Number(id.ID);
+
+ 
+  
   const [formData, setFormData] = useState<{ excessParts: ExcessPart[] }>({
     excessParts: [
       {
         itemNo: "",
         qty: "",
-        excessDate: "",
-        pickingID: "",
+        excessDate: formattedDate,
+        pickingID: "1",
         location: "",
+        ID: staffID,
       },
     ],
   });
-  const [open, setOpen] = React.useState<boolean>(false);
   const [data, setData] = React.useState<Data>({ data: [], invalid: []});
   const [transaction, setTransaction] = React.useState<boolean>(false);
   const handleChange = (
@@ -49,10 +65,11 @@ const FormComponent: React.FC = () => {
   ) => {
     const { value } = e.target;
     const updatedParts = [...formData.excessParts];
+    //@ts-ignore
     updatedParts[i][key] = value;
     setFormData({ ...formData, excessParts: updatedParts });
   };
-
+  
   const addPart = () => {
     setFormData({
       ...formData,
@@ -61,9 +78,10 @@ const FormComponent: React.FC = () => {
         {
           itemNo: "",
           qty: "",
-          excessDate: "",
-          pickingID: "",
+          excessDate: formattedDate,
+          pickingID: "1",
           location: "",
+          ID: staffID,
         },
       ],
     });
@@ -79,7 +97,7 @@ const FormComponent: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/EPMS/matecon-data/excesstransaction.php",
+        "/api/excesstransaction.php",
         formData.excessParts
       );
       console.log(response.data);
@@ -102,9 +120,10 @@ const FormComponent: React.FC = () => {
             {
               itemNo: "",
               qty: "",
-              excessDate: "",
-              pickingID: "",
+              excessDate: formattedDate,
+              pickingID: "1",
               location: "",
+              ID: staffID,
             },
           ],
         });
@@ -155,8 +174,6 @@ const FormComponent: React.FC = () => {
               <tr>
                 <td>Part No</td>
                 <td>Quantity</td>
-                <td>Excess Date</td>
-                <td>Picking ID</td>
                 <td>Location</td>
               </tr>
             </thead>
@@ -179,22 +196,9 @@ const FormComponent: React.FC = () => {
                       onChange={(e) => handleChange(e, index, "qty")}
                     />
                   </td>
-                  <td>
-                    <Input
-                      type="date"
-                      value={part.excessDate}
-                      disabled = {transaction}
-                      onChange={(e) => handleChange(e, index, "excessDate")}
-                    />
-                  </td>
-                  <td>
-                    <Input
-                      type="text"
-                      value={part.pickingID}
-                      disabled = {transaction}
-                      onChange={(e) => handleChange(e, index, "pickingID")}
-                    />
-                  </td>
+             
+                 
+
                   <td>
                     <Stack direction="row" spacing={2}>
                       <Radio

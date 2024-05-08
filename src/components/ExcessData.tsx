@@ -4,13 +4,8 @@ import {
   Grid,
   Sheet,
   Table,
-  MenuButton,
-  Dropdown,
   Box,
   IconButton,
-  Menu,
-  MenuItem,
-  ListDivider,
   Typography,
   Avatar,
   Button,
@@ -18,11 +13,9 @@ import {
   Stack,
   Chip,
   Link,
-  Skeleton,
-  AspectRatio,
   CircularProgress
 } from "@mui/joy";
-import { Route, Link as RouterLink } from "react-router-dom";
+import {Link as RouterLink } from "react-router-dom";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion, { accordionClasses } from "@mui/joy/Accordion";
@@ -34,6 +27,15 @@ import CheckIcon from "@mui/icons-material/Check";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import RestoreIcon from "@mui/icons-material/Restore";
 
+import DialogTitle from '@mui/joy/DialogTitle';
+import DialogContent from '@mui/joy/DialogContent';
+import DialogActions from '@mui/joy/DialogActions';
+import Modal from '@mui/joy/Modal';
+import ModalDialog from '@mui/joy/ModalDialog';
+import DeleteForever from '@mui/icons-material/DeleteForever';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
+import Divider from '@mui/joy/Divider';
+
 interface ExcessData {
   excessID : number;
   itemNo: string;
@@ -43,6 +45,7 @@ interface ExcessData {
   pickingID: string;
   location: string;
   status: string;
+  Name : string;
 }
 
 export interface Root {
@@ -58,10 +61,12 @@ export interface Daum {
   startDate: any;
   planlot: string;
   openqty: any;
+  Name: string;
 }
 
 function App(): JSX.Element {
   const [excessData, setExcessData] = useState<ExcessData[]>([]);
+  const [open, setOpen] = React.useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setPage] = useState(1);
   const [indexs, setIndex] = React.useState<number | null>(null);
@@ -71,16 +76,17 @@ function App(): JSX.Element {
   const today = new Date();
   const formattedToday = today.toISOString().slice(0, 10).replace(/-/g, ""); // Format today's date as "YYYYMMDD"
 
-  const itemsPerPage = 6; // Adjust as needed
+  const itemsPerPage = 5; // Adjust as needed
   const MAX_PAGES_DISPLAYED = 5; // Adjust the number of page buttons to display
 
   const fetchData = async (search = "", page = 1) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/EPMS/matecon-data/excessData.php?search=${search}&page=${page}&pageSize=${itemsPerPage}`
+        `/api/excessData.php?search=${search}&page=${page}&pageSize=${itemsPerPage}`
       );
       const data = await response.json();
       setExcessData(data.data);
+      console.log(selectedItemNo);
    
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -104,7 +110,7 @@ function App(): JSX.Element {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:8080/EPMS/matecon-data/forecast.php?itemNo=${itemNo}`
+        `/api/forecast.php?itemNo=${itemNo}`
       );
       const data = await response.json();
       console.log(data);
@@ -197,6 +203,26 @@ function App(): JSX.Element {
         justifyContent="center"
         alignItems="center"
       >
+        <Modal open={open} onClose={() => setOpen(false)}>
+        <ModalDialog variant="outlined" role="alertdialog">
+          <DialogTitle>
+            <WarningRoundedIcon />
+            Confirmation
+          </DialogTitle>
+          <Divider />
+          <DialogContent>
+            Are you sure you want to dispose this item?
+          </DialogContent>
+          <DialogActions>
+            <Button variant="solid" color="danger" onClick={() => setOpen(false)}>
+              Dispose
+            </Button>
+            <Button variant="plain" color="neutral" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </ModalDialog>
+      </Modal>
         <Typography level="h2" startDecorator={<ReceiptLongIcon />}>
           Excess Part List
         </Typography>
@@ -271,7 +297,7 @@ function App(): JSX.Element {
                     key={index}
                     onClick={() => handleRowClick(dataItem.itemNo)}
                     expanded={indexs === index}
-                    onChange={(event, expanded) => {
+                    onChange={(expanded) => {
                       setIndex(expanded ? index : null);
                     }}
                   >
@@ -318,6 +344,7 @@ function App(): JSX.Element {
                                 </Typography>
                               </Avatar>
                             </td>
+                           
                             <td>
                               <Typography level="body-xs">Status</Typography>
                               <Chip color="primary">
@@ -331,6 +358,20 @@ function App(): JSX.Element {
                       </Table>
                     </AccordionSummary>
                     <AccordionDetails>
+                    <Box sx={{
+                      alignItems : 'end',
+                      display: 'flex',
+                      alignSelf: 'end',
+                    }}>
+                      <Typography level="body-xs">Person In Charge :  <Typography level="title-sm">
+                                  {dataItem.Name ? dataItem.Name : 'not assigned'}
+                                </Typography></Typography>
+                    </Box>
+                              
+                           
+                                
+                          
+                            
                       <Box>
                         <Stack direction={"row"} spacing={2}>
                           <Avatar color="success">
@@ -344,6 +385,19 @@ function App(): JSX.Element {
                               Forecast plan lot can be used for this item.
                             </Typography>
                           </ListItemContent>
+
+                          <Button
+                            variant="solid"
+                            color="danger"
+                            size="sm"
+                            endDecorator={<DeleteForever />}
+        onClick={() => setOpen(true)}
+                            sx={{
+                              alignSelf: "center",
+                            }}
+                          >
+                            Dispose
+                          </Button>
                         </Stack>
                        
                           <AccordionGroup
@@ -404,7 +458,7 @@ function App(): JSX.Element {
                                   </tr>
                                 </thead>
                                 
-                                {additionalData.map((item, index) =>
+                                {additionalData.map((item) =>
                                   item.startDate >
                                     dataItem.excessDate.replace(/-/g, "") &&
                                   item.startDate < formattedToday ? (
@@ -494,7 +548,7 @@ function App(): JSX.Element {
                                       </th>
                                     </tr>
                                   </thead>
-                                  {additionalData.map((item, index) =>
+                                  {additionalData.map((item) =>
                                     item.startDate >
                                       dataItem.excessDate.replace(/-/g, "") &&
                                     item.startDate > formattedToday ? (

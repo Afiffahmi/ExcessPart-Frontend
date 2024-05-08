@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 interface RowData {
@@ -8,7 +8,7 @@ interface RowData {
 function App(): JSX.Element {
   const [jsonData, setJsonData] = useState<RowData[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const totalPages = 1 ;
 
   const fetchData = async (): Promise<void> => {
     const response = await fetch(`http://localhost:3000/api/extract-excel?filePath=C:\\Users\\5004705295\\Desktop\\picking0204.xlsx`);

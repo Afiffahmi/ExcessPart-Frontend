@@ -3,16 +3,17 @@ import { useColorScheme } from '@mui/joy/styles';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
-import Stack from '@mui/joy/Stack';
 import Avatar from '@mui/joy/Avatar';
-import Input from '@mui/joy/Input';
-import Button from '@mui/joy/Button';
+
 import Tooltip from '@mui/joy/Tooltip';
 import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import ListDivider from '@mui/joy/ListDivider';
+import Button from '@mui/joy/Button';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
@@ -30,6 +31,7 @@ function ColorSchemeToggle() {
   if (!mounted) {
     return <IconButton size="sm" variant="outlined" color="primary" />;
   }
+
   return (
     <Tooltip title="Change theme" variant="outlined">
       <IconButton
@@ -53,7 +55,15 @@ function ColorSchemeToggle() {
 }
 
 export default function Header() {
-  const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate('/login',{replace:true});
+  };
+
+  const id = (localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token") as string) : ""  );
+
   return (
     <Box
       sx={{
@@ -80,14 +90,14 @@ export default function Header() {
             sx={{ maxWidth: '32px', maxHeight: '32px', borderRadius: '9999999px' }}
           >
             <Avatar
-              src="https://i.pravatar.cc/40?img=2"
-              srcSet="https://i.pravatar.cc/80?img=2"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQutRuy3lhOPLjXxT0a0xzkgJd5NP3DaWWdyTu6j-UkYA&s"
+           
               sx={{ maxWidth: '32px', maxHeight: '32px' }}
             />
             
           </MenuButton>
           <Typography level="title-sm" textColor="text.primary">
-                    Afif Fahmi
+                    {id.name}
                   </Typography>
           <Menu
             placement="bottom-end"
@@ -107,33 +117,30 @@ export default function Header() {
                 }}
               >
                 <Avatar
-                  src="https://i.pravatar.cc/40?img=2"
-                  srcSet="https://i.pravatar.cc/80?img=2"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQutRuy3lhOPLjXxT0a0xzkgJd5NP3DaWWdyTu6j-UkYA&s"
+             
                   sx={{ borderRadius: '50%' }}
                 />
                 <Box sx={{ ml: 1.5 }}>
                   <Typography level="title-sm" textColor="text.primary">
-                    Afif fahmi
+                    {id.name}
                   </Typography>
                   <Typography level="body-xs" textColor="text.tertiary">
-                    5004705295
+                    {id.StaffID}
                   </Typography>
                 </Box>
               </Box>
             </MenuItem>
             <ListDivider />
-            <MenuItem>
-              <HelpRoundedIcon />
-              Help
-            </MenuItem>
-            <MenuItem>
-              <SettingsRoundedIcon />
-              Settings
-            </MenuItem>
-            <ListDivider />
-            <MenuItem>
-              <LogoutRoundedIcon />
-              Log out
+ 
+            <MenuItem onClick={() => handleLogout()}>
+            
+              <Button variant="plain" >
+                
+               <LogoutRoundedIcon /> 
+
+              Log out</Button>
+              
             </MenuItem>
           </Menu>
         </Dropdown>

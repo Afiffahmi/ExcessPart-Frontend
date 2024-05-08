@@ -1,12 +1,11 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { format } from 'date-fns';
+
 
 // Define the PdfGenerator component
 const PdfGenerator = ({consumeData,dataItem}:any) => {
 
-    console.log(consumeData);
-    console.log(dataItem);
+    const id = (localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token") as string) : ""  );
 
   
 
@@ -42,9 +41,9 @@ const PdfGenerator = ({consumeData,dataItem}:any) => {
     pdf.line(10, 18, 500, 18)
     pdf.text('Person In Charge', 13, 23)
     pdf.setFont('custom', 'normal');
-    pdf.text("Full Name here", 13, 28)
+    pdf.text(id.name, 13, 28)
     pdf.addImage(callImage, 'PNG', 13, 29, 3, 3);
-    pdf.text("Staff ID", 16, 32)
+    pdf.text(id.StaffID, 13, 32)
     pdf.setFont('Newsreader', 'bold')
     pdf.text('Excess ID      :', 230, 23)
     pdf.text('Excess Date   :', 230, 27)
@@ -95,6 +94,7 @@ const PdfGenerator = ({consumeData,dataItem}:any) => {
 
     pdf.setFont('Newsreader');
     const itemDetailsYStart = 70;
+     // @ts-ignore
     pdf.autoTable({
         head: [itemDetailsHeaders],
         body: itemDetailsRows,

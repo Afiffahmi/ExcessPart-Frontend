@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Card, LinearProgress, Input } from '@mui/joy';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
@@ -12,7 +12,7 @@ function App() {
   const [insertions, setInsertions] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10)); // Set initial date to today
-
+  console.log(insertedCount);
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (loading) {
@@ -57,7 +57,7 @@ function App() {
     });
 
     try {
-      const response = await axios.post('http://localhost:3000/api/upload-excel', formData, {
+      const response = await axios.post('/data/upload-excel', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -73,7 +73,7 @@ function App() {
 
         
 
-          const phpResponse = await axios.post('http://localhost:8080/EPMS/matecon-data/upload.php', dataObject);
+          const phpResponse = await axios.post('/api/upload.php', dataObject);
           console.log(phpResponse.data);
           successfulInsertions++;
         } catch (error) {

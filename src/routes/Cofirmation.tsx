@@ -11,7 +11,7 @@ import { ListItemContent, Typography } from "@mui/joy";
 import { Divider } from "@mui/joy";
 import { useLocation } from "react-router-dom";
 
-import { FormControl, FormLabel } from "@mui/joy";
+import {FormLabel } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
@@ -89,7 +89,7 @@ export default function TeamExample() {
       
       try {
         const response = await axios.post(
-          "http://localhost:8080/EPMS/matecon-data/regconsume.php",
+          "/api/regconsume.php",
           updatedConsume
         );
         console.log(response.data);
@@ -100,7 +100,7 @@ export default function TeamExample() {
         if (response.data.status == 200) {
           try {
             const consumeData = await axios.post(
-              "http://localhost:8080/EPMS/matecon-data/consume.php",
+              "/api/consume.php",
               updatedConsume
             );
 
@@ -178,7 +178,7 @@ export default function TeamExample() {
           <List
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(1300px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(1000px, 1fr))",
               gap: 1,
             }}
           >
@@ -389,7 +389,7 @@ export default function TeamExample() {
                           required
                         />
 
-                        <FormLabel>Consume Date</FormLabel>
+                        <FormLabel>Request Date</FormLabel>
                         <Input
                           type="date"
                           onChange={(e) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {Sheet ,Card, Divider, Stack,Table,List,ListItem,ListItemDecorator,CardActions,Button,Alert } from '@mui/joy';
 import CardContent from '@mui/joy/CardContent';
 import Chip from '@mui/joy/Chip';
@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import axios from 'axios';
-import { ToastContainer, toast, Bounce } from "react-toastify";
+import {toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -18,6 +18,7 @@ interface Confirmation {
   qty: string;
   location: string;
   excessDate: string;
+  ID: number;
 }
 
 interface Invalid {
@@ -31,12 +32,14 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
     // Set the confirmation state when the component mounts or when the data prop changes
     setConfirmation(data);
     setInvalidData(invalid);
+    console.log('this' ,data)
   }, [data,invalid]); // Only re-run the effect if data changes
+
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try{
-      const response = await axios.post('http://localhost:8080/EPMS/matecon-data/regexcess.php', confirmation);
+      const response = await axios.post('/api/regexcess.php', confirmation);
        if (response.data.message) {
         toast.success(response.data.message, {
           position: "bottom-right",
@@ -57,6 +60,7 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
           theme: "light",
           transition: Bounce,
         });
+        console.log(response.data.data);
 // Clear form after successful submission
         setFormData({
           excessParts: [
@@ -66,6 +70,7 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
               excessDate: "",
               pickingID: "",
               location: "",
+              ID: "",
 
             },
           ],
@@ -138,6 +143,7 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
                   {item?.excessDate}
                 </Typography></td>
                 </tbody>
+        
               </Table>
             ))}
 
@@ -145,7 +151,7 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
           
           <CardActions>
             <form onSubmit={handleSubmit}>
-              <Stack direction="row" spacing={130} sx={{alignContent:"flex-start"}}>
+              <Stack direction="row" spacing={100} sx={{alignContent:"flex-start"}}>
               <Typography level="title-lg" sx={{ mr: 'auto' }}>
             {confirmation.length}{' '}
             <Typography fontSize="sm" textColor="text.tertiary">
@@ -173,7 +179,8 @@ export default function InteractiveCard({ data,invalid,setTransaction,setFormDat
             
             <ListItem key={index}>
               <ListItemDecorator>
-                <CloseIcon color="danger"/>
+                  
+                <CloseIcon color="error"/>
                 
               </ListItemDecorator>
               {item?.itemNo}
